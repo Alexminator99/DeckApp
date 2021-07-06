@@ -44,9 +44,8 @@ dependencies {
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
 
-    def lifecycle_version = "2.3.1"
-    def arch_version = "2.1.0"
 
+    def lifecycle_version = "2.4.0-alpha02"
     // ViewModel
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
     // LiveData
@@ -54,20 +53,8 @@ dependencies {
     // Lifecycles only (without ViewModel or LiveData)
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
 
-    // Saved state module for ViewModel
-    implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycle_version"
-
-    // optional - helpers for implementing LifecycleOwner in a Service
-    implementation "androidx.lifecycle:lifecycle-service:$lifecycle_version"
-
-    // optional - ProcessLifecycleOwner provides a lifecycle for the whole application process
-    implementation "androidx.lifecycle:lifecycle-process:$lifecycle_version"
-
-    // optional - ReactiveStreams support for LiveData
-    implementation "androidx.lifecycle:lifecycle-reactivestreams-ktx:$lifecycle_version"
-
-    // optional - Test helpers for LiveData
-    testImplementation "androidx.arch.core:core-testing:$arch_version"
+    // Coroutines
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.0'
 
     // Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
