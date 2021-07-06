@@ -1,13 +1,13 @@
 package com.everything.deckapp
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
+import androidx.appcompat.app.AppCompatActivity
 import com.everything.deckapp.databinding.ActivityMainBinding
 import com.everything.deckapp.models.Card
 import com.google.gson.Gson
-import java.net.URL
+import kotlin.math.min
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,9 +28,15 @@ class MainActivity : AppCompatActivity() {
         specialCardsValue["J"] = 11
         specialCardsValue["Q"] = 12
         specialCardsValue["K"] = 13
+
+        typesOfCards["clubs"] = 1
+        typesOfCards["diamonds"] = 2
+        typesOfCards["spades"] = 3
+        typesOfCards["hearts"] = 4
+
     }
 
-    private fun getAllCardsFromJsonAndRunAlgorithm() : Int {
+    private fun getAllCardsFromJsonAndRunAlgorithm(): Int {
         val cardsArray = ArrayList<Card>()
 
         cardsArray.addAll(Gson().fromJson(cardsDeck, Array<Card>::class.java))
@@ -38,60 +44,28 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getAllDecksWithCompleteSize(cardsArray: ArrayList<Card>): Int {
-        val deck = ArrayList<ArrayList<Card>>()
+        val deck = Array(5) { IntArray(14) }
 
-        typesOfCards.forEach { cardType: String ->
-            val listOfCardType = ArrayList<Card>()
-            cardsArray.map {
-                if (cardType == it.suit)
-                    listOfCardType.add(it)
-            }
-
-            deck.add(listOfCardType)
+        repeat(cardsArray.size) {
+            deck[typesOfCards[cardsArray[it].suit]!!][if (cardsArray[it].value.toIntOrNull() == null)
+                specialCardsValue[cardsArray[it].value]!!.toInt()
+            else cardsArray[it].value.toInt()]++
         }
 
-        val entireCardsForAType = ArrayList<Int>()
+        var result = 9999999
 
-        deck.forEach {
-            entireCardsForAType.add(getQuantityOfAllTypesOfCard(it))
+        for (i in 1..4) {
+            deck[i].sort()
+            result = min(result, deck[i][1])
         }
 
-        entireCardsForAType.sort()
-        return entireCardsForAType[0]   // The answer is the smallest amount of deck card that can be possible made
-    }
-
-    private fun getQuantityOfAllTypesOfCard(arrayOfTypeCard: ArrayList<Card>): Int {
-
-        val cardsSums = ArrayList<Int>()
-        repeat(14){
-            cardsSums.add(0)
-        }
-
-        arrayOfTypeCard.forEach {
-            if (it.value.toIntOrNull() == null)
-                cardsSums[specialCardsValue[it.value]!!]++      // We make here a check of course but we know is not null
-            else cardsSums[it.value.toInt()]++
-        }
-
-        cardsSums.sort()
-        return cardsSums[1]
+        return result
     }
 
     companion object {
-        private val typesOfCards = arrayOf("clubs", "spades", "diamonds", "hearts")
+        private val typesOfCards = HashMap<String, Int>()
 
         private val specialCardsValue = HashMap<String, Int>()
-    }
-
-    class CardsComparator : Comparator<Card> {
-        override fun compare(o1: Card?, o2: Card?): Int {
-            if (o1 == null || o2 == null)
-                return 0
-            if (o1.suit.compareTo(o2.suit) == 0)
-                return o1.value.compareTo(o2.value)
-            return o1.suit.compareTo(o2.suit)
-        }
-
     }
 }
 
