@@ -2,17 +2,25 @@ package com.everything.deckapp
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.everything.deckapp.data.models.CardItem
+import com.everything.deckapp.data.models.UrlInfoRequest
 import com.everything.deckapp.databinding.ActivityMainBinding
 import com.everything.deckapp.viewModels.JsonViewModel
+import java.util.*
+import java.util.regex.Matcher
+import java.util.regex.Pattern
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 import kotlin.math.min
-
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private val urlInfoRequest = UrlInfoRequest()
 
     private val viewModel: JsonViewModel by lazy {
         ViewModelProvider(this).get(JsonViewModel::class.java)
@@ -26,19 +34,89 @@ class MainActivity : AppCompatActivity() {
         fillSpecialCards()
 
         initViewModel()
+        init()
     }
 
     private fun initViewModel() {
-        viewModel.getDeckRequest("60e342b39328b059d7b7801e", secretKey = "\$2b\$10\$ppaKYa7yQfoGUU1hMQXfwevzkNbovRWLWbV4O0NKiTGUcRgcUJAaG")
         viewModel.jsonData.observe(this) {
             it.forEach { cardItem ->
                 cardItem.toString()
             }
 
-            Log.d("RESULT", getAllDecksWithCompleteSize(it).toString())
+            val answer = getAllDecksWithCompleteSize(it)
+
+            binding.relativeLayoutLoading.visibility = View.GONE
+
+            binding.answerLayout.visibility = View.VISIBLE
+
+            binding.textViewAnswerAlgorithm.text = answer.toString()
+            binding.textViewAnswerDecodedText.text = urlInfoRequest.answer
+
+            if (urlInfoRequest.answer != null && urlInfoRequest.answer == answer.toString()) {
+
+                binding.textViewStatusAnswer.text = getString(R.string.correct_answer)
+            } else {
+                binding.textViewStatusAnswer.text = getString(R.string.incorrect_answer)
+            }
         }
-        viewModel.errorMessage.observe(this){
+        viewModel.errorMessage.observe(this) {
             Log.e("ERROR", it)
+        }
+    }
+
+    private fun init() {
+        binding.materialButtonBeginTest.setOnClickListener {
+            urlInfoRequest.clear()
+
+            binding.answerCardLayout.visibility = View.VISIBLE
+            binding.relativeLayoutLoading.visibility = View.VISIBLE
+
+            binding.answerLayout.visibility = View.GONE
+            binding.progressIndicator.show()
+
+            if (binding.textInputEditTextUrl.text?.isNotEmpty() == true) {
+                val text = binding.textInputEditTextUrl.text.toString()
+
+                // search for the answer if exists
+                if (text.lowercase(Locale.ROOT).contains("ans")) {
+                    var startIndex = text.lowercase(Locale.ROOT).indexOf("ans")
+                    val answer = text.substring(startIndex + 3, startIndex + 4)
+                    print(answer)
+
+                    urlInfoRequest.answer = answer
+
+                    val url = binding.textInputEditTextUrl.text.toString()
+                        .split("https?:////(www\\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)")
+
+                    if (url.isNotEmpty()) {
+                        urlInfoRequest.url = url[0].substring(url[0].indexOf("b/") + 2)
+
+                        startIndex = text.lowercase(Locale.ROOT).indexOf("secret-key:")
+                        if (startIndex != -1) {
+                            startIndex += 12
+                            val secretKey = text.substring(
+                                startIndex,
+                                text.lowercase(Locale.ROOT).lastIndexOf("\")")
+                            ).trim()
+
+                            urlInfoRequest.secretKey = secretKey
+                        }
+                        viewModel.getDeckRequest(urlInfoRequest)
+                        Toast.makeText(
+                            this,
+                            "Url is correct, loading answer...",
+                            Toast.LENGTH_LONG
+                        )
+                            .show()
+                    } else {
+                        Toast.makeText(this, "Please paste a valid URL", Toast.LENGTH_SHORT).show()
+                        binding.answerCardLayout.visibility = View.GONE
+                    }
+                }
+            } else {
+                Toast.makeText(this, "Please paste a valid URL", Toast.LENGTH_SHORT).show()
+                binding.answerCardLayout.visibility = View.GONE
+            }
         }
     }
 
