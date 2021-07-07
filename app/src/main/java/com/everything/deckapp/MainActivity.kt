@@ -11,9 +11,6 @@ import com.everything.deckapp.data.models.UrlInfoRequest
 import com.everything.deckapp.databinding.ActivityMainBinding
 import com.everything.deckapp.viewModels.JsonViewModel
 import java.util.*
-import java.util.regex.Matcher
-import java.util.regex.Pattern
-import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 import kotlin.math.min
 
@@ -61,6 +58,8 @@ class MainActivity : AppCompatActivity() {
         }
         viewModel.errorMessage.observe(this) {
             Log.e("ERROR", it)
+            binding.answerCardLayout.visibility = View.GONE
+            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
         }
     }
 
