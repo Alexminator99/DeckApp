@@ -1,162 +1,174 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:animateLayoutChanges="true"
-    tools:context=".MainActivity">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/materialTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:text="@string/app_name"
-        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <data>
+        <variable
+            name="viewModel"
+            type="com.everything.deckapp.viewModels.JsonViewModel" />
+    </data>
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/materialCardView"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/materialTextView">
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        tools:context=".MainActivity">
 
-        <LinearLayout
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/materialTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="@string/app_name"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/materialCardView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="12dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/materialTextView">
 
-            <com.google.android.material.textfield.TextInputLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-
-                app:helperText="You can insert string with format AnsX secretKey URL or AnsX URL, the system will detect all.">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/text_input_edit_text_url"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:minLines="1"
-                    android:hint="Insert URL"
-                    android:maxLines="4" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/materialButtonBeginTest"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|center_horizontal"
-                android:layout_marginTop="16dp"
-                android:text="Begin Test" />
-
-        </LinearLayout>
-
-    </com.google.android.material.card.MaterialCardView>
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/answerCardLayout"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:visibility="gone"
-        android:layout_margin="16dp"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="12dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/materialCardView">
-
-        <LinearLayout
-            android:id="@+id/answerLayout"
-            android:visibility="gone"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="16dp">
-
-            <com.google.android.material.textview.MaterialTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Answer (algorithm)"
-                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                android:layout_gravity="center"/>
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/textViewAnswerAlgorithm"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                android:layout_gravity="center"/>
-
-            <com.google.android.material.textview.MaterialTextView
-                android:layout_width="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_height="wrap_content"
-                android:text="Answer (given)"
-                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                android:layout_gravity="center"/>
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/textViewAnswerDecodedText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                android:layout_gravity="center"/>
-
-            <com.google.android.material.textview.MaterialTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_gravity="center"
-                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                android:text="Test Status:"/>
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/textViewStatusAnswer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                android:layout_marginTop="16dp"
-                android:layout_gravity="center"
-                />
-
-            <ImageView
-                android:id="@+id/imageViewStatus"
-                android:layout_width="match_parent"
-                android:layout_margin="16dp"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_round_check_box_24"
-                app:tint="@android:color/holo_green_dark"/>
-        </LinearLayout>
+                android:orientation="vertical"
+                android:padding="16dp">
 
-        <RelativeLayout
-            android:id="@+id/relativeLayoutLoading"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    app:helperText="You can insert string with format AnsX secretKey URL or AnsX URL, the system will detect all.">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/text_input_edit_text_url"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:minLines="1"
+                        android:hint="@string/insert_url"
+                        android:maxLines="4" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/materialButtonBeginTest"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/begin_test" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/answerCardLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="0dp"
+            android:visibility="gone"
+            android:layout_margin="16dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/materialCardView">
 
-            <com.google.android.material.progressindicator.LinearProgressIndicator
-                android:id="@+id/progressIndicator"
+            <LinearLayout
+                android:id="@+id/answerLayout"
+                android:visibility="gone"
                 android:layout_width="match_parent"
-                android:layout_centerInParent="true"
-                android:layout_margin="24dp"
-                android:indeterminate="true"
-                android:indeterminateBehavior="cycle"
-                android:layout_height="wrap_content"/>
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="16dp">
 
-        </RelativeLayout>
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/answer_algorithm"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                    android:layout_gravity="center" />
 
-    </com.google.android.material.card.MaterialCardView>
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/textViewAnswerAlgorithm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:text="@{viewModel.currentAnswer}"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                    android:layout_gravity="center" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/answer_given"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                    android:layout_gravity="center" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/textViewAnswerDecodedText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:text="@{viewModel.obtainedAnswer}"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                    android:layout_gravity="center" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_gravity="center"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                    android:text="@string/test_status" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/textViewStatusAnswer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:text="@{viewModel.currentStatus}"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                    android:layout_marginTop="16dp"
+                    android:layout_gravity="center" />
+
+                <ImageView
+                    android:id="@+id/imageViewStatus"
+                    android:layout_width="match_parent"
+                    android:layout_margin="16dp"
+                    android:layout_height="match_parent"
+                    android:src="@{viewModel.currentStatusBoolean ? @drawable/ic_round_check_box_24 : @drawable/ic_round_cancel_24}"
+                    android:contentDescription="@string/app_name"
+                    app:tint="@{viewModel.currentStatusBoolean ? @android:color/holo_green_dark : @android:color/holo_red_dark}" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/relativeLayoutLoading"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.google.android.material.progressindicator.LinearProgressIndicator
+                    android:id="@+id/progressIndicator"
+                    android:layout_width="match_parent"
+                    android:layout_centerInParent="true"
+                    android:layout_margin="24dp"
+                    android:indeterminate="true"
+                    android:indeterminateBehavior="cycle"
+                    android:layout_height="wrap_content" />
+
+            </RelativeLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
