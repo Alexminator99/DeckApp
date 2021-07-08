@@ -2,4 +2,9 @@
     <string name="app_name">DeckApp</string>
     <string name="correct_answer">Correct answer</string>
     <string name="incorrect_answer">Incorrect answer</string>
+    <string name="insert_url">Insert URL</string>
+    <string name="begin_test">Begin Test</string>
+    <string name="answer_algorithm">Answer (algorithm)</string>
+    <string name="answer_given">Answer (given)</string>
+    <string name="test_status">Test Status:</string>
 </resources>
