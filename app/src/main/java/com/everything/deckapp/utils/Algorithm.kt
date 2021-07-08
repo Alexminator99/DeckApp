@@ -1,11 +1,6 @@
 package com.everything.deckapp.utils
 
-import android.content.Context
-import android.view.View
-import android.widget.Toast
-import com.everything.deckapp.MainActivity
 import com.everything.deckapp.data.models.CardItem
-import com.everything.deckapp.data.models.UrlInfoRequest
 import java.util.*
 import kotlin.collections.HashMap
 import kotlin.math.min
@@ -35,56 +30,25 @@ class Algorithm {
             val deck = Array(5) { IntArray(14) }
 
             repeat(cardsArray.size) {
-                deck[typesOfCards[cardsArray[it].suit]!!][if (cardsArray[it].value.toIntOrNull() == null)
-                    specialCardsValue[cardsArray[it].value]!!.toInt()
-                else cardsArray[it].value.toInt()]++
+                deck[typesOfCards[cardsArray[it].suit]!!][getColumnByValue(cardsArray[it].value)]++
+                deck[typesOfCards[cardsArray[it].suit]!!][0] = 999999
             }
 
             var result = 9999999
 
             for (i in 1..4) {
-                deck[i].sort()
-                result = min(result, deck[i][1])
+                val minimum = deck[i].minOrNull()
+                if (minimum != null)
+                    result = min(result, minimum)
             }
 
             return result
         }
 
-        fun getUrlInfoRequest(text: String): UrlInfoRequest? {
-            val urlInfoRequest = UrlInfoRequest()
-
-            // search for the answer if exists
-            if (text.lowercase(Locale.ROOT).contains("ans")) {
-                var startIndex = text.lowercase(Locale.ROOT).indexOf("ans")
-                val answer = text.substring(startIndex + 3, startIndex + 4)
-                print(answer)
-
-                urlInfoRequest.answer = answer
-
-                val url = text
-                    .split("https?:////(www\\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)")
-
-                if (url.isNotEmpty()) {
-                    urlInfoRequest.url = url[0].substring(url[0].indexOf("b/") + 2)
-
-                    startIndex = text.lowercase(Locale.ROOT).indexOf("secret-key:")
-                    if (startIndex != -1) {
-                        startIndex += 12
-                        val secretKey = text.substring(
-                            startIndex,
-                            text.lowercase(Locale.ROOT).lastIndexOf("\")")
-                        ).trim()
-
-                        urlInfoRequest.secretKey = secretKey
-                    }
-
-                   return urlInfoRequest
-                } else {
-                   return null
-                }
-            }
-
-            return null
+        private fun getColumnByValue(value: String): Int {
+            return if (value.toIntOrNull() == null)
+                specialCardsValue[value] ?: 0 // should never return 0
+            else value.toInt()
         }
     }
 }
