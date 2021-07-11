@@ -1,6 +1,7 @@
 package com.everything.deckapp.viewModels
 
 import android.app.Application
+import android.text.TextUtils.substring
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -15,6 +16,7 @@ import com.everything.deckapp.utils.Algorithm
 import com.everything.deckapp.utils.CurrentStatus
 import kotlinx.coroutines.launch
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class JsonViewModel(application: Application) : AndroidViewModel(application) {
@@ -118,10 +120,15 @@ class JsonViewModel(application: Application) : AndroidViewModel(application) {
 
             urlInfoRequest.answer = answer
 
-            val url = modifiedText
-                .split("https?:////(www\\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)")
+            val url:ArrayList<String> = ArrayList()
 
-            if (url.isNotEmpty()) {
+            if(modifiedText.contains("http") || modifiedText.contains("www"))
+            {
+                val temp = modifiedText.substring(modifiedText.indexOf("http"))
+                url.addAll(temp.split("https?:////(www\\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)"))
+            }
+
+            if (url.isNotEmpty() && url[0].indexOf("b/") != -1) {
                 urlInfoRequest.url = url[0].substring(url[0].indexOf("b/") + 2)
 
                 startIndex = modifiedText.lowercase(Locale.ROOT).indexOf("secret-key:")
@@ -144,8 +151,13 @@ class JsonViewModel(application: Application) : AndroidViewModel(application) {
 
             var startIndex: Int
 
-            val url = modifiedText
-                .split("https?:////(www\\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)")
+            val url:ArrayList<String> = ArrayList()
+
+            if(modifiedText.contains("http{s}?") || modifiedText.contains("www"))
+            {
+                val temp = modifiedText.substring(modifiedText.indexOf("http"))
+                url.addAll(temp.split("https?:////(www\\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)"))
+            }
 
             if (url.isNotEmpty()) {
                 urlInfoRequest.url = url[0].substring(url[0].indexOf("b/") + 2)
