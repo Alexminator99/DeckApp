@@ -53,4 +53,15 @@ class JsonViewModelTest {
         assertEquals("60e342b39328b059d7b7801e", urlInfoRequest?.url)
         assertEquals("\$2b\$10\$ppaKYa7yQfoGUU1hMQXfwevzkNbovRWLWbV4O0NKiTGUcRgcUJAaG", urlInfoRequest?.secretKey)
     }
+
+    @Test
+    fun getUrlInfoRequest_returnsNull() {
+        /** When requesting [UrlInfoRequest] given an URL */
+        val URL = "Ans5 (private)(\"secret-key: \$2b\$10\$ppaKYa7yQfoGUU1hMQXfwevzkNbovRWLWbV4O0NKiTGUcRgcUJAaG\")\n" +
+                "https://api.jsonbin.io//60e342b39328b059d7b7801e"
+        val urlInfoRequest = jsonViewModel.getUrlInfoRequest(URL)
+        print(urlInfoRequest)
+        // Then result is not null, is an instance of UrlInfoRequest and answer should be 5 and url key 60e342b39328b059d7b7801e
+        assertThat(urlInfoRequest, `is`((nullValue(UrlInfoRequest::class.java))))
+    }
 }
